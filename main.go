@@ -16,6 +16,9 @@ const (
 	//dbname   = "postgres"
 	interval = 6
 	fail     = 3
+	defaultPostgresUser = "postgres"
+	defaultPostgresPort = 5432
+	defaultPostgresHost = "localhost"
 	//logfile  = "/tmp/logtest"
 )
 
@@ -32,14 +35,29 @@ func main() {
 	defer logFile.Close()
 	log.SetOutput(logFile)
 	currentTime := time.Now().Format(time.RFC3339)
+	if os.Getenv("HOST_ADDR1") || os.Getenv("HOST_ADDR2") != nil{
+		hostAddrEnv1 := os.Getenv("HOST_ADDR1")
+		hostAddrEnv2 := os.Getenv("HOST_ADDR2")
+	} else {
+		hostAddrEnv1 := defaultPostgresHost
+		hostAddrEnv2 := defaultPostgresHost
+	}
+	
+	if os.Getenv("HOST_PORT1") || os.Getenv("HOST_PORT2") != nil{
+		hostPortEnv1 := os.Getenv("HOST_PORT1")
+		hostPortEnv2 := os.Getenv("HOST_PORT2")
+	} else {
+		hostPortEnv1 := defaultPostgresPort
+		hostPortEnv2 := defaultPostgresPort
+	}
 	//interval := flag.Int("interval", interval, "Time for check")
 	//fail := flag.Int("fail", fail, "Time for fail")
-	host1 := flag.String("host1", "localhost", "")
-	host2 := flag.String("host2", "localhost", "")
-	user1 := flag.String("user1", "postgres", "")
-	user2 := flag.String("user2", "postgres", "")
-	port1 := flag.Int("port1", 5432, "a int var")
-	port2 := flag.Int("port2", 5432, "a int var")
+	host1 := flag.String("host1", hostAddrEnv1, "")
+	host2 := flag.String("host2", hostAddrEnv2, "")
+	user1 := flag.String("user1", defaultPostgresUser, "")
+	user2 := flag.String("user2", defaultPostgresUser, "")
+	port1 := flag.Int("port1", hostPortEnv1, "a int var")
+	port2 := flag.Int("port2", hostPortEnv2, "a int var")
 	password1 := flag.String("password1", "", "")
 	password2 := flag.String("password2", "", "")
 	localdata := flag.String("localdata", "/var/lib/pgsql/data", "")
